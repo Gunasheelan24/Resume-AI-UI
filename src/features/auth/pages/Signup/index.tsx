@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { User } from "./types";
 import "./SignIn.module.scss";
+import { getcreatedAccountDetails } from "../../services/auth.services";
 
 const Signup: React.FC = () => {
   // validation
@@ -36,7 +37,7 @@ const Signup: React.FC = () => {
   // handle Submit
   const createAccount = (value: User) => {
     try {
-      console.log(value);
+      getcreatedAccountDetails(value);
     } catch (error) {
       console.log(error);
     } finally {
