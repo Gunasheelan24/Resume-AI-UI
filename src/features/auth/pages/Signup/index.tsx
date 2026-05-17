@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as zod from "zod";
 
 import { motion } from "framer-motion";
@@ -6,25 +6,59 @@ import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { HrImage } from "@/assets/png/Index";
-import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { User } from "./types";
 import "./SignIn.module.scss";
 import { getcreatedAccountDetails } from "../../services/auth.services";
+import ErrorPopup from "@/components/common/error-popup/ErrorPopup";
+import type { User } from "./types";
+import type { PopupType } from "@/types/popup-types";
 
 const Signup: React.FC = () => {
+  // hooks
+  const [popup, setPopup] = useState<PopupType>({
+    isSuccess: false,
+    message: "",
+    popupToogle: false,
+  });
+
   // validation
   const signupValidation = zod.object({
-    email: zod.email().nonempty(),
-    userName: zod.string().nonempty().min(8).max(16),
-    fullName: zod.string().nonempty().min(8).max(16),
-    password: zod.string().nonempty().min(8).max(21),
+    email: zod
+      .email("Please enter a valid email")
+      .nonempty("Email is required"),
+    userName: zod
+      .string()
+      .nonempty("User is required")
+      .min(8, "Username must be at least 8 characters")
+      .max(16, "Username cannot exceed 16 characters"),
+    fullName: zod
+      .string()
+      .nonempty("Fullname is required")
+      .min(8, "FullName must be at least 8 characters")
+      .max(16, "FullName cannot exceed 16 characters"),
+    password: zod
+      .string()
+      .nonempty("Password is required")
+      .min(8, "Password must be at least 8 characters")
+      .max(21, "Password cannot exceed 16 characters"),
   });
 
   // React Hook Form
-  const { register, handleSubmit, reset } = useForm<User>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, touchedFields },
+  } = useForm<User>({
     defaultValues: {
       email: "",
       userName: "",
@@ -35,9 +69,19 @@ const Signup: React.FC = () => {
   });
 
   // handle Submit
-  const createAccount = (value: User) => {
+  const createAccount = async (value: User) => {
     try {
-      getcreatedAccountDetails(value);
+      const userDetails = await getcreatedAccountDetails(value);
+      if (userDetails?.data?.statusCode == 201) {
+        setPopup((prev) => {
+          return {
+            ...prev,
+            isSuccess: true,
+            message: "User created succesfull",
+            popupToogle: true,
+          };
+        });
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -103,7 +147,13 @@ const Signup: React.FC = () => {
               <FcGoogle className="!h-5 !w-5" />
               Sign up with google
             </Button>
-            <Button variant="outline" className="flex-1 mb-3 p-5">
+            <Button
+              onClick={() =>
+                (window.location.href = "http://localhost:3000/auth/github")
+              }
+              variant="outline"
+              className="flex-1 mb-3 p-5"
+            >
               <FaGithub className="!h-5 !w-5" /> Sign up with GitHub
             </Button>
           </div>
@@ -129,6 +179,11 @@ const Signup: React.FC = () => {
                     className="p-5"
                     {...register("fullName")}
                   />
+                  {errors.fullName && touchedFields.fullName && (
+                    <FieldDescription>
+                      {errors.fullName.message}
+                    </FieldDescription>
+                  )}
                 </Field>
 
                 {/* userName Field */}
@@ -137,10 +192,16 @@ const Signup: React.FC = () => {
                   <Input
                     id="userName"
                     type="text"
+                    autoComplete="username"
                     placeholder="Enter Your Username"
                     className="p-5"
                     {...register("userName")}
                   />
+                  {errors.userName && touchedFields.userName && (
+                    <FieldDescription>
+                      {errors.userName.message}
+                    </FieldDescription>
+                  )}
                 </Field>
 
                 {/* Email Field */}
@@ -153,6 +214,9 @@ const Signup: React.FC = () => {
                     className="p-5"
                     {...register("email")}
                   />
+                  {errors.email && touchedFields.email && (
+                    <FieldDescription>{errors.email.message}</FieldDescription>
+                  )}
                 </Field>
 
                 <Field className="space-y-0">
@@ -160,10 +224,16 @@ const Signup: React.FC = () => {
                   <Input
                     id="password"
                     type="password"
+                    autoComplete="current-password"
                     placeholder="Enter Your Password"
                     className="p-5"
                     {...register("password")}
                   />
+                  {errors.password && touchedFields.password && (
+                    <FieldDescription>
+                      {errors.password.message}
+                    </FieldDescription>
+                  )}
                 </Field>
 
                 {/* Button */}
@@ -179,12 +249,40 @@ const Signup: React.FC = () => {
             </FieldSet>
           </form>
         </div>
+        <ErrorPopup
+          isSuccess={popup.isSuccess}
+          message={popup.message}
+          popupToogle={popup.popupToogle}
+          closePopup={() =>
+            setPopup((prev) => {
+              return {
+                ...prev,
+                message: "",
+                popupToogle: false,
+              };
+            })
+          }
+        />
       </section>
       <section className="flex-1 hidden md:flex">
         <img
           src={HrImage}
           alt="hr-images"
           className="h-full w-full object-cover"
+        />
+        <ErrorPopup
+          isSuccess={popup.isSuccess}
+          message={popup.message}
+          popupToogle={popup.popupToogle}
+          closePopup={() =>
+            setPopup((prev) => {
+              return {
+                ...prev,
+                message: "",
+                popupToogle: false,
+              };
+            })
+          }
         />
       </section>
     </main>
