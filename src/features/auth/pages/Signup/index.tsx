@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ErrorPopup from "@/components/common/error-popup/ErrorPopup";
 import * as zod from "zod";
 
 import { motion } from "framer-motion";
@@ -16,11 +17,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import "./SignIn.module.scss";
 import { getcreatedAccountDetails } from "../../services/auth.services";
-import ErrorPopup from "@/components/common/error-popup/ErrorPopup";
+import { Link } from "react-router-dom";
 import type { User } from "./types";
 import type { PopupType } from "@/types/popup-types";
+import "./signup.module.scss";
 
 const Signup: React.FC = () => {
   // hooks
@@ -245,6 +246,16 @@ const Signup: React.FC = () => {
                     Create Account
                   </Button>
                 </Field>
+                <p className="text-sm text-center">
+                  Already have an account?
+                  <Link
+                    to={"/auth/signin"}
+                    className="text-red-500 underline cursor-pointer hover:text-red-800"
+                  >
+                    {" "}
+                    Login
+                  </Link>
+                </p>
               </FieldGroup>
             </FieldSet>
           </form>
