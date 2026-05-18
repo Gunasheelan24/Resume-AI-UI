@@ -145,7 +145,7 @@ const SignIn: React.FC = () => {
                 {/* forget password */}
                 <Field>
                   <p className="text-red-500 cursor-pointer text-sm text-end">
-                    Forget Password?
+                    <Link to={"/auth/reset-password"}>Forget Password?</Link>
                   </p>
                 </Field>
 
