@@ -22,6 +22,7 @@ import { Link } from "react-router-dom";
 import type { User } from "./types";
 import type { PopupType } from "@/types/popup-types";
 import "./signup.module.scss";
+import type { ApiError } from "../Signin/types";
 
 const Signup: React.FC = () => {
   // hooks
@@ -84,9 +85,10 @@ const Signup: React.FC = () => {
         });
       }
     } catch (error) {
-      console.log(error);
+      const apiError = error as ApiError;
+      console.log(error, apiError);
     } finally {
-      reset();
+      // reset();
     }
   };
 

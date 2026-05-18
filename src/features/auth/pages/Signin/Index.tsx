@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as zod from "zod";
 
 import {
@@ -15,10 +15,21 @@ import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { SignUser } from "./types";
+import type { ApiError, SignUser } from "./types";
 import { signInImg } from "@/assets/png/Index";
+import type { PopupType } from "@/types/popup-types";
+import ErrorPopup from "@/components/common/error-popup/ErrorPopup";
+import { signInHandler } from "../../services/auth.services";
 
 const SignIn: React.FC = () => {
+  // hooks
+  const [popup, setPopup] = useState<PopupType>({
+    isSuccess: false,
+    popupToogle: false,
+    message: "",
+  });
+
+  // validation schema
   const validationSchema = zod.object({
     email: zod
       .email("Please enter a valid email")
@@ -45,11 +56,35 @@ const SignIn: React.FC = () => {
   });
 
   // form submit handler
-  const loginAccount = (value: SignUser) => {
+  const loginAccount = async (value: SignUser) => {
     try {
-      console.log(value);
+      const getUserDetails = await signInHandler(value);
+
+      if (getUserDetails?.status === 201) {
+        setPopup({
+          isSuccess: true,
+          message: "Signed in successfully.",
+          popupToogle: true,
+        });
+      }
     } catch (error) {
-      console.log(error);
+      const apiError = error as ApiError;
+      console.log(apiError);
+
+      //  Throw Errors
+      if (apiError?.statusCode == 401) {
+        setPopup({
+          isSuccess: false,
+          message: apiError?.message,
+          popupToogle: true,
+        });
+      } else {
+        setPopup({
+          isSuccess: false,
+          message: "Login failed. Please try again.",
+          popupToogle: true,
+        });
+      }
     } finally {
       reset();
     }
@@ -58,7 +93,7 @@ const SignIn: React.FC = () => {
   return (
     <main className="flex h-screen w-screen">
       <section className="flex-1 flex items-center justify-center flex-col">
-        <div className="w-[70%]">
+        <div className="w-[90%] md:w-[90%] xl:w-[70%]">
           <p className="text-sm absolute top-5 left-2 font-black tracking-[-0.04em] text-gray-900 mb-4">
             Resume<span className="text-[rgba(59,130,246,0.6)]">Builder</span>
           </p>
@@ -165,13 +200,35 @@ const SignIn: React.FC = () => {
               </Link>
             </p>
           </div>
+          <div className="md:hidden visible">
+            <ErrorPopup
+              closePopup={() =>
+                setPopup((prev) => {
+                  return { ...prev, popupToogle: false, message: "" };
+                })
+              }
+              isSuccess={popup.isSuccess}
+              message={popup.message}
+              popupToogle={popup.popupToogle}
+            />
+          </div>
         </div>
       </section>
-      <section className="flex-1">
+      <section className="flex-1 hidden md:block">
         <img
           src={signInImg}
           alt="login-image"
           className="object-cover h-full w-full"
+        />
+        <ErrorPopup
+          closePopup={() =>
+            setPopup((prev) => {
+              return { ...prev, popupToogle: false, message: "" };
+            })
+          }
+          isSuccess={popup.isSuccess}
+          message={popup.message}
+          popupToogle={popup.popupToogle}
         />
       </section>
     </main>
