@@ -37,3 +37,21 @@ export const signInHandler = async (data: SignUser) => {
     throw error;
   }
 };
+
+// reset password handler
+export const getResetPasswordResponse = async (data: { email: string }) => {
+  try {
+    const getResetPasswordResponse = await api.post(
+      `${parentEndpoint.auth}/${childEndpoints.resetPassword}`,
+      data,
+    );
+
+    return getResetPasswordResponse;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error.response?.data;
+    }
+
+    throw error;
+  }
+};

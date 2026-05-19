@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { getResetPasswordResponse } from "../../services/auth.services";
 
 const ResetPassword: React.FC = () => {
   // validation schema
@@ -35,9 +36,10 @@ const ResetPassword: React.FC = () => {
   });
 
   // formHandler
-  const resetPasswordHandler = (value: { email: string }) => {
+  const resetPasswordHandler = async (value: { email: string }) => {
     try {
-      console.log(value, ":::::::");
+      const userDetails = await getResetPasswordResponse(value);
+      console.log(userDetails, ":::::::");
     } catch (error) {
       console.log(error);
     } finally {
@@ -81,7 +83,7 @@ const ResetPassword: React.FC = () => {
           {/* Forget Password Form  */}
           <form
             onSubmit={handleSubmit(resetPasswordHandler)}
-            className="w-[40%] mt-5"
+            className="md:w-[55%] xl:w-[40%] w-[85%] mt-5"
           >
             <FieldSet>
               <FieldGroup>
@@ -114,6 +116,15 @@ const ResetPassword: React.FC = () => {
                 </Field>
               </FieldGroup>
             </FieldSet>
+
+            <div className="text-end w-full">
+              <p className="mt-3 text-sm text-end">
+                Remember your password?{" "}
+                <Link className="text-red-500 underline" to="/auth/signin">
+                  Login
+                </Link>
+              </p>
+            </div>
           </form>
         </div>
       </section>
