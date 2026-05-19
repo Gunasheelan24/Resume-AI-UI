@@ -4,6 +4,7 @@ import SignIn from "@/features/auth/pages/Signin/Index";
 import ResetPassword from "@/features/auth/pages/reset-password/Index";
 
 import { createBrowserRouter } from "react-router-dom";
+import VerifyOtp from "@/features/auth/pages/verify-otp/Index";
 
 export const routerObject = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ export const routerObject = createBrowserRouter([
       {
         path: "reset-password",
         element: <ResetPassword />,
+      },
+      {
+        path: "verify-otp",
+        element: <VerifyOtp />,
       },
     ],
   },
