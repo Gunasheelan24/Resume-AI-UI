@@ -1,11 +1,11 @@
 import React from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { HiOutlineRefresh } from "react-icons/hi";
 import { Field } from "@/components/ui/field";
 import { verifyImg } from "@/assets/png/Index";
-// import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import {
   Card,
   CardContent,
@@ -20,22 +20,29 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import "./verifyOtp.module.scss";
+import type { VerifyOtp } from "./types";
 
 const VerifyOtp: React.FC = () => {
-  // React Hook Form
-  // const {
-  //   control,
-  //   handleSubmit,
-  //   reset,
-  //   formState: { errors, touchedFields },
-  // } = useForm({
-  //   defaultValues: {
-  //     otp: "",
-  //   },
-  // });
+  // React Router Hook
+  const { email } = useParams();
 
-  // // Handle Submit
+  // React Hook Form
+  const { control, handleSubmit, reset } = useForm<VerifyOtp>({
+    defaultValues: {
+      otp: "",
+    },
+  });
+
+  // Handle Submit
+  const handleVerifyOtp = (value: VerifyOtp) => {
+    try {
+      console.log(value);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      reset();
+    }
+  };
   return (
     <main className="h-screen">
       {/* Header */}
@@ -46,7 +53,7 @@ const VerifyOtp: React.FC = () => {
 
         <p className="text-md">
           Remember Your Password?{" "}
-          <Link className="text-red-500 underline" to="/auth/signup">
+          <Link className="text-red-500 underline" to="/auth/signin ">
             Login
           </Link>
         </p>
@@ -54,7 +61,10 @@ const VerifyOtp: React.FC = () => {
 
       {/* OTP CONTENT */}
       <section className="flex flex-col items-center justify-center h-full">
-        <form className="md:w-[70%] xl:w-[40%] w-[95%]">
+        <form
+          className="md:w-[70%] xl:w-[40%] w-[95%]"
+          onSubmit={handleSubmit(handleVerifyOtp)}
+        >
           <Card>
             <CardHeader>
               <div className="flex justify-center">
@@ -65,31 +75,50 @@ const VerifyOtp: React.FC = () => {
                 Enter the 6-digit verification code to securely reset your
                 password
                 <span className="block font-medium underline underline-offset-2">
-                  gunasheelan16@gmail.com
+                  {email ? email : "something@gmail.com"}
                 </span>
               </CardDescription>
             </CardHeader>
 
             <CardContent>
-              <Field>
-                <div className="relative h-15">
-                  <div className="absolute left-1/2 -translate-x-1/2">
-                    <InputOTP maxLength={6} id="otp" required>
-                      <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:text-xl">
-                        <InputOTPSlot index={0} />
-                        <InputOTPSlot index={1} />
-                        <InputOTPSlot index={2} />
-                      </InputOTPGroup>
-                      <InputOTPSeparator className="mx-2" />
-                      <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:text-xl">
-                        <InputOTPSlot index={3} />
-                        <InputOTPSlot index={4} />
-                        <InputOTPSlot index={5} />
-                      </InputOTPGroup>
-                    </InputOTP>
-                  </div>
-                </div>
-              </Field>
+              <Controller
+                name="otp"
+                control={control}
+                rules={{
+                  required: "OTP Is required",
+                  minLength: {
+                    value: 6,
+                    message: "OTP must be 6 digits",
+                  },
+                }}
+                render={({ field }) => (
+                  <Field>
+                    <div className="relative h-15">
+                      <div className="absolute left-1/2 -translate-x-1/2">
+                        <InputOTP
+                          maxLength={6}
+                          id="otp"
+                          required
+                          onChange={field.onChange}
+                          value={field.value}
+                        >
+                          <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:text-xl">
+                            <InputOTPSlot index={0} />
+                            <InputOTPSlot index={1} />
+                            <InputOTPSlot index={2} />
+                          </InputOTPGroup>
+                          <InputOTPSeparator className="mx-2" />
+                          <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:text-xl">
+                            <InputOTPSlot index={3} />
+                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={5} />
+                          </InputOTPGroup>
+                        </InputOTP>
+                      </div>
+                    </div>
+                  </Field>
+                )}
+              />
             </CardContent>
 
             <CardFooter className="flex items-center justify-between gap-5">

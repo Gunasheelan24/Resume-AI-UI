@@ -2,8 +2,12 @@ import React from "react";
 import * as zod from "zod";
 
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import { resetPassword } from "@/assets/png/Index";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { getResetPasswordResponse } from "../../services/auth.services";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Field,
   FieldDescription,
@@ -11,16 +15,15 @@ import {
   FieldLabel,
   FieldSet,
 } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { getResetPasswordResponse } from "../../services/auth.services";
 
 const ResetPassword: React.FC = () => {
   // validation schema
   const validationSchema = zod.object({
     email: zod.email("Invalid Email Address").nonempty("Email is required"),
   });
+
+  // React Router Hook
+  const navigate = useNavigate();
 
   // ReactHookhook
   const {
@@ -39,7 +42,9 @@ const ResetPassword: React.FC = () => {
   const resetPasswordHandler = async (value: { email: string }) => {
     try {
       const userDetails = await getResetPasswordResponse(value);
-      console.log(userDetails, ":::::::");
+      if (userDetails?.status == 201) {
+        navigate(`/auth/verify-otp/${value.email}`);
+      }
     } catch (error) {
       console.log(error);
     } finally {

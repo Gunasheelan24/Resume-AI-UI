@@ -25,7 +25,7 @@ export const routerObject = createBrowserRouter([
         element: <ResetPassword />,
       },
       {
-        path: "verify-otp",
+        path: "verify-otp/:email",
         element: <VerifyOtp />,
       },
     ],
