@@ -5,6 +5,7 @@ import { childEndpoints, parentEndpoint } from "@/api/endpoint";
 // types
 import type { User } from "../pages/Signup/types";
 import type { SignUser } from "../pages/Signin/types";
+import type { VerifyOtp } from "../pages/verify-otp/types";
 
 // signup handler
 export const getcreatedAccountDetails = async (data: User) => {
@@ -50,6 +51,25 @@ export const getResetPasswordResponse = async (data: { email: string }) => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw error.response?.data;
+    }
+
+    throw error;
+  }
+};
+
+// verify otp
+export const verifyOneTimePasswordHandler = async (
+  value: VerifyOtp & { email: string },
+) => {
+  try {
+    const response = await api.post(
+      `${parentEndpoint.auth}/${childEndpoints.verifyOtp}`,
+      value,
+    );
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error.request?.data;
     }
 
     throw error;

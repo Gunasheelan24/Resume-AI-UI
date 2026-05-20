@@ -6,4 +6,5 @@ export const childEndpoints = {
   createAccount: "create-account",
   signIn: "signin",
   resetPassword: "reset-password",
+  verifyOtp: "verify-otp",
 };

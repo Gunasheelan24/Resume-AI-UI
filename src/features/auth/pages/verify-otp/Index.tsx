@@ -1,11 +1,10 @@
 import React from "react";
+import z from "zod";
 
 import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { HiOutlineRefresh } from "react-icons/hi";
-import { Field } from "@/components/ui/field";
 import { verifyImg } from "@/assets/png/Index";
-import { useForm, Controller } from "react-hook-form";
 import {
   Card,
   CardContent,
@@ -20,23 +19,70 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+} from "@/components/ui/field";
+import { useForm, Controller } from "react-hook-form";
+import { verifyOneTimePasswordHandler } from "../../services/auth.services";
+import { Input } from "@/components/ui/input";
 import type { VerifyOtp } from "./types";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const VerifyOtp: React.FC = () => {
   // React Router Hook
   const { email } = useParams();
 
+  // Validation Schema
+  const validationSchema = z
+    .object({
+      otp: z
+        .string("Otp should be a string")
+        .nonempty("Otp is required")
+        .min(6, "Otp must be at least 6 characters")
+        .max(6, "Otp cannot exceed 6 characters"),
+      password: z
+        .string("password should be a string")
+        .nonempty("Password is required")
+        .min(8, "Password must be at least 8 characters")
+        .max(21, "Password cannot exceed 16 characters"),
+      confirmPassword: z
+        .string("confirmPassword should be a string")
+        .nonempty("confirmPassword is required")
+        .min(8, "confirmPassword must be at least 8 characters")
+        .max(21, "confirmPassword cannot exceed 16 characters"),
+    })
+    .refine((data) => data.password == data.confirmPassword, {
+      error: "Passwords did not match",
+      path: ["confirmPassword"],
+    });
+
   // React Hook Form
-  const { control, handleSubmit, reset } = useForm<VerifyOtp>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    register,
+    formState: { errors, touchedFields },
+  } = useForm<VerifyOtp>({
     defaultValues: {
       otp: "",
+      password: "",
+      confirmPassword: "",
     },
+    resolver: zodResolver(validationSchema),
   });
 
   // Handle Submit
-  const handleVerifyOtp = (value: VerifyOtp) => {
+  const handleVerifyOtp = async (value: VerifyOtp) => {
     try {
-      console.log(value);
+      await verifyOneTimePasswordHandler({
+        ...value,
+        email: email as string,
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -80,6 +126,45 @@ const VerifyOtp: React.FC = () => {
               </CardDescription>
             </CardHeader>
 
+            <FieldSet className="flex items-center">
+              <FieldGroup className="w-[90%]">
+                <Field>
+                  <FieldLabel htmlFor="password">Password</FieldLabel>
+                  <Input
+                    id="password"
+                    type="password"
+                    autoComplete="password"
+                    placeholder="Enter your password"
+                    className="h-10"
+                    {...register("password")}
+                  />
+                  {errors.password && touchedFields.password && (
+                    <FieldDescription className="text-red-500">
+                      {errors.password.message}
+                    </FieldDescription>
+                  )}
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="confirm-password">
+                    Confirm Password
+                  </FieldLabel>
+                  <Input
+                    type="password"
+                    id="confirmPassword"
+                    autoComplete="confirmPassword"
+                    placeholder="Enter your confirm password"
+                    className="h-10"
+                    {...register("confirmPassword")}
+                  />
+                  {errors.confirmPassword && touchedFields.confirmPassword && (
+                    <FieldDescription className="text-red-500">
+                      {errors.confirmPassword.message}
+                    </FieldDescription>
+                  )}
+                </Field>
+              </FieldGroup>
+            </FieldSet>
+
             <CardContent>
               <Controller
                 name="otp"
@@ -92,33 +177,45 @@ const VerifyOtp: React.FC = () => {
                   },
                 }}
                 render={({ field }) => (
-                  <Field>
-                    <div className="relative h-15">
-                      <div className="absolute left-1/2 -translate-x-1/2">
-                        <InputOTP
-                          maxLength={6}
-                          id="otp"
-                          required
-                          onChange={field.onChange}
-                          value={field.value}
-                        >
-                          <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:text-xl">
-                            <InputOTPSlot index={0} />
-                            <InputOTPSlot index={1} />
-                            <InputOTPSlot index={2} />
-                          </InputOTPGroup>
-                          <InputOTPSeparator className="mx-2" />
-                          <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:text-xl">
-                            <InputOTPSlot index={3} />
-                            <InputOTPSlot index={4} />
-                            <InputOTPSlot index={5} />
-                          </InputOTPGroup>
-                        </InputOTP>
-                      </div>
-                    </div>
-                  </Field>
+                  <FieldSet className="mb-2">
+                    <FieldGroup>
+                      <Field>
+                        <div className="relative h-20">
+                          <div className="absolute left-1/2 -translate-x-1/2">
+                            <p className="text-center mb-3 underline text-emerald-950">
+                              Verification Code
+                            </p>
+                            <InputOTP
+                              maxLength={6}
+                              id="otp"
+                              onChange={field.onChange}
+                              onBlur={field.onBlur}
+                              value={field.value}
+                            >
+                              <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:text-xl">
+                                <InputOTPSlot index={0} />
+                                <InputOTPSlot index={1} />
+                                <InputOTPSlot index={2} />
+                              </InputOTPGroup>
+                              <InputOTPSeparator className="mx-2" />
+                              <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:text-xl">
+                                <InputOTPSlot index={3} />
+                                <InputOTPSlot index={4} />
+                                <InputOTPSlot index={5} />
+                              </InputOTPGroup>
+                            </InputOTP>
+                          </div>
+                        </div>
+                      </Field>
+                    </FieldGroup>
+                  </FieldSet>
                 )}
               />
+              {errors.otp && touchedFields.otp && (
+                <FieldDescription className="text-red-500 text-center">
+                  {errors.otp.message}
+                </FieldDescription>
+              )}
             </CardContent>
 
             <CardFooter className="flex items-center justify-between gap-5">
