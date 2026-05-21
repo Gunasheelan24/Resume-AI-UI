@@ -1,6 +1,6 @@
 import type { User } from "../Signup/types";
 
-export type VerifyOtp = Pick<User, "password"> & {
+export type VerifyOtpType = Pick<User, "password"> & {
   otp: string;
   password: string;
   confirmPassword: string;

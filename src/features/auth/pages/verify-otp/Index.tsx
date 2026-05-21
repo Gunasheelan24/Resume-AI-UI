@@ -31,7 +31,6 @@ import {
   FieldLabel,
   FieldSet,
 } from "@/components/ui/field";
-import type { VerifyOtp } from "./types";
 import type { PopupType } from "@/types/popup-types";
 
 const VerifyOtp: React.FC = () => {
