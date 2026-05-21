@@ -3,3 +3,9 @@ export interface PopupType {
   message: string;
   popupToogle: boolean;
 }
+
+export interface errorType {
+  message: string;
+  error: string;
+  statusCode: number;
+}
