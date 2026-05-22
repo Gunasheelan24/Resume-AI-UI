@@ -3,20 +3,20 @@ import React from "react";
 
 const ResumeLayout: React.FC = () => {
   return (
-    <main className="grid grid-rows-[15%_1fr_15%] grid-cols-[1fr_30%_1fr_1fr] h-screen">
+    <main className="grid grid-cols-[30%_1fr] grid-rows-[15%_1fr_15%] h-screen">
       {/* header */}
-      <section className="h-20">
+      <section className="bg-blue-400 col-span-2">
         <ResumeHeader />
       </section>
 
       {/* aside */}
-      <section></section>
+      <section className="bg-blue-500"></section>
 
       {/* content */}
-      <section></section>
+      <section className="bg-blue-600"></section>
 
       {/* footer */}
-      <section></section>
+      <section className="bg-blue-700 col-span-2"></section>
     </main>
   );
 };
