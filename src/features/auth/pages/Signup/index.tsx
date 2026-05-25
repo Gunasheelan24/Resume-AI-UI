@@ -22,7 +22,7 @@ import { Link } from "react-router-dom";
 import type { User } from "./types";
 import type { PopupType } from "@/types/popup-types";
 import "./signup.module.scss";
-import type { ApiError } from "../Signin/types";
+import type { ApiError } from "../signin/types";
 import Loader from "@/components/common/app-loader";
 
 const Signup: React.FC = () => {

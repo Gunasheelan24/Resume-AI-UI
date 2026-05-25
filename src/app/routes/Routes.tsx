@@ -1,6 +1,6 @@
 import AuthLayout from "../../layouts/AuthLayout";
-import Signup from "../../features/auth/pages/Signup";
-import SignIn from "@/features/auth/pages/Signin/Index";
+import Signup from "../../features/auth/pages/signup";
+import SignIn from "@/features/auth/pages/signin/Index";
 import ResetPassword from "@/features/auth/pages/reset-password/Index";
 
 import { createBrowserRouter } from "react-router-dom";

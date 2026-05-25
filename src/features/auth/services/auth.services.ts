@@ -3,8 +3,8 @@ import axios from "axios";
 import { childEndpoints, parentEndpoint } from "@/api/endpoint";
 
 // types
-import type { User } from "../pages/Signup/types";
-import type { SignUser } from "../pages/Signin/types";
+import type { User } from "../pages/signup/types";
+import type { SignUser } from "../pages/signin/types";
 import type { VerifyOtp } from "../pages/verify-otp/types";
 
 // signup handler
