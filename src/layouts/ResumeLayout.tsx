@@ -13,7 +13,7 @@ const ResumeLayout: React.FC = () => {
       </section>
 
       {/* content */}
-      <section className="self-center">
+      <section>
         <ResumeLandingPage />
       </section>
 

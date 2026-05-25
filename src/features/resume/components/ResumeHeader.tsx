@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 const ResumeHeader: React.FC = () => {
   return (
-    <main className="h-full w-full flex items-center ps-2 pe-2">
+    <main className="h-full w-full flex border-b items-center ps-2 pe-2">
       <section className="flex items-center justify-start relative h-full w-full">
         {/* Resume Logo */}
         <img
