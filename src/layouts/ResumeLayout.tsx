@@ -6,19 +6,19 @@ import ResumeLandingPage from "@/features/resume/pages/resume-landing";
 
 const ResumeLayout: React.FC = () => {
   return (
-    <main className="grid grid-cols-[1fr] grid-rows-[10%_1fr_10%] h-screen">
+    <main className="grid grid-cols-[1fr] grid-rows-[8%_1fr_7%] h-screen">
       {/* header */}
       <section>
         <ResumeHeader />
       </section>
 
       {/* content */}
-      <section>
+      <section className="self-center">
         <ResumeLandingPage />
       </section>
 
       {/* footer */}
-      <section className="absolute w-full bottom-0">
+      <section>
         <Footer />
       </section>
     </main>
