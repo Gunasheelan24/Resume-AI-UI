@@ -2,7 +2,7 @@ import React from "react";
 
 import Footer from "@/features/resume/components/ResumeFooter";
 import ResumeHeader from "@/features/resume/components/ResumeHeader";
-import ResumeLandingPage from "@/features/resume/pages/resume-landing";
+import ResumeLandingPage from "@/features/resume/pages/resume-hero";
 
 const ResumeLayout: React.FC = () => {
   return (

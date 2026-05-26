@@ -13,6 +13,7 @@ body {
   --color-authprimary: rgb(254, 255, 246);
   --color-authsecondary: rgb(239, 239, 227);
   --font-poppins: "Poppins", sans-serif;
+  --font-playfair: "playfairDisplay", sans-serif;
 }
 
 @theme inline {

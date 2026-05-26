@@ -1,27 +1,37 @@
 import React from "react";
-import { companyLogo } from "@/assets/png/Index";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const ResumeHeader: React.FC = () => {
   return (
-    <main className="h-full w-full flex border-b  items-center ps-2 pe-2">
-      <section className="md:flex md:items-center md:justify-start relative h-full w-full hidden">
-        {/* Resume Logo */}
-        <img
-          src={companyLogo}
-          alt="company-logo"
-          className="h-15 object-cover absolute left-[-2px]"
-        />
-        <p className="absolute left-18">Resume-Builder</p>
+    <main className="grid grid-cols-2 xl:grid-cols-3 ps-3 pe-3 pb-3 pt-3 border-b border-b-chart-7">
+      <section className="self-center">
+        <div className="inline-flex items-center rounded-xl border border-gray-200/80 bg-white px-4 py-2 shadow-sm shadow-gray-200/50">
+          <span className="text-md font-semibold tracking-tight text-gray-900">
+            Resume
+          </span>
+
+          <span className="ml-2 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-400 px-2.5 py-1 text-sm font-semibold uppercase tracking-wide text-white">
+            AI
+          </span>
+        </div>
       </section>
 
-      <section className="flex gap-3 items-center md:justify-end justify-between w-full">
+      <section className="self-center hidden xl:block">
+        <ul className="flex gap-9 items-center justify-center font-medium">
+          <li className="cursor-pointer">Home</li>
+          <li className="cursor-pointer">Build Your Resume</li>
+          <li className="cursor-pointer">Pricing</li>
+          <li className="cursor-pointer">Blog</li>
+        </ul>
+      </section>
+
+      <section className="grid grid-flow-col justify-end items-center gap-2">
         <Button className="h-9" variant="outline">
-          <Link to="/auth/signin">Login to your account</Link>
+          <Link to="/auth/signin">Sign in</Link>
         </Button>
         <Button variant="default" className="bg-blue-600 h-9">
-          <Link to="/auth/signup">Create Account</Link>
+          <Link to="/auth/signup">Get Started For Freee</Link>
         </Button>
       </section>
     </main>

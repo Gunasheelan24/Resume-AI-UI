@@ -6,6 +6,7 @@ import ResetPassword from "@/features/auth/pages/reset-password/Index";
 import { createBrowserRouter } from "react-router-dom";
 import VerifyOtp from "@/features/auth/pages/verify-otp/Index";
 import ResumeLayout from "@/layouts/ResumeLayout";
+import GetResume from "@/features/get-resume";
 
 export const routerObject = createBrowserRouter([
   {
@@ -34,5 +35,9 @@ export const routerObject = createBrowserRouter([
   {
     path: "resume",
     element: <ResumeLayout />,
+  },
+  {
+    path: "get-user-resume",
+    element: <GetResume />,
   },
 ]);
