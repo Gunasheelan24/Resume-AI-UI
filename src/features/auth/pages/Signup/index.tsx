@@ -30,11 +30,11 @@ const Signup: React.FC = () => {
   const [popup, setPopup] = useState<PopupType>({
     isSuccess: false,
     message: "",
-    popupToogle: false,
+    popupToogle: false, 
   });
 
   // loader state
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(false); 
 
   // validation
   const signupValidation = zod.object({
