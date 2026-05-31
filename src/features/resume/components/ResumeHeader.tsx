@@ -1,40 +1,53 @@
 import React from "react";
+import { companyLogo } from "@/assets/png/Index";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 
 const ResumeHeader: React.FC = () => {
   return (
-    <main className="grid grid-cols-2 xl:grid-cols-3 ps-3 pe-3 pb-3 pt-3 border-b border-b-chart-7">
-      <section className="self-center">
-        <div className="inline-flex items-center rounded-xl border border-gray-200/80 bg-white px-4 py-2 shadow-sm shadow-gray-200/50">
-          <span className="text-md font-semibold tracking-tight text-gray-900">
-            Resume
-          </span>
+    <header className="pt-3 pe-2 flex justify-between">
+      <section className="flex items-center">
+        <img
+          src={companyLogo}
+          alt="CareerLens Logo"
+          className="h-12 w-12 object-contain"
+        />
 
-          <span className="ml-2 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-400 px-2.5 py-1 text-sm font-semibold uppercase tracking-wide text-white">
-            AI
-          </span>
-        </div>
+        <h1 className="text-xl font-medium tracking-tight text-gray-900 -ms-1">
+          Career<span className="font-bold">Lens</span>
+        </h1>
       </section>
 
-      <section className="self-center hidden xl:block">
-        <ul className="flex gap-9 items-center justify-center font-medium">
-          <li className="cursor-pointer">Home</li>
-          <li className="cursor-pointer">Build Your Resume</li>
-          <li className="cursor-pointer">Pricing</li>
-          <li className="cursor-pointer">Blog</li>
+      <section className="self-center hidden xl:block relative">
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 h-[100px] w-[550px] rounded-full bg-[#F4F4F4]"></div>
+
+        <ul className="flex gap-8 text-[0.9rem] font-medium relative">
+          <li className="cursor-pointer hover:underline hover:underline-offset-3 hover:-translate-y-1 duration-100">
+            Overview
+          </li>
+          <li className="cursor-pointer hover:underline hover:underline-offset-3 hover:-translate-y-1 duration-100">
+            Why Choose Us
+          </li>
+          <li className="cursor-pointer hover:underline hover:underline-offset-3 hover:-translate-y-1 duration-100">
+            How It Works
+          </li>
+          <li className="cursor-pointer hover:underline hover:underline-offset-3 hover:-translate-y-1 duration-100">
+            Pricing
+          </li>
         </ul>
       </section>
 
-      <section className="grid grid-flow-col justify-end items-center gap-2">
-        <Button className="h-9" variant="outline">
-          <Link to="/auth/signin">Sign in</Link>
+      <section className="flex gap-2 items-center">
+        <Button
+          variant="outline"
+          className="px-7 py-5 rounded-2xl cursor-pointer"
+        >
+          Login
         </Button>
-        <Button variant="default" className="bg-blue-600 h-9">
-          <Link to="/auth/signup">Get Started For Freee</Link>
+        <Button className="px-7 py-5   rounded-2xl cursor-pointer">
+          Get Started
         </Button>
       </section>
-    </main>
+    </header>
   );
 };
 

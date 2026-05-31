@@ -49,16 +49,13 @@ const ResumeLandingPage: React.FC = () => {
     },
   ];
   return (
-    <main className="mt-1 0">
+    <main className="">
       <section>
-        <div className="flex items-center justify-center h-screen gap-20">
+        <div className="flex flex-col px-5 md:px-0 md:flex-row items-center justify-center h-screen gap-20">
           <div>
-            <h1 className="text-2xl mt-10 md:text-5xl font-bold text-indigo-800 mb-4">
+            <h1 className="text-2xl mt-10 md:text-5xl font-bold  mb-4">
               Build a Resume
-              <span className="mt-2 text-indigo-900 block">
-                {" "}
-                That Gets You Hired
-              </span>
+              <span className="mt-2 block"> That Gets You Hired</span>
             </h1>
 
             <p className="text-md text-gray-400">
@@ -69,25 +66,25 @@ const ResumeLandingPage: React.FC = () => {
             <div className="flex gap-3">
               <Button
                 variant="outline"
-                className="mt-5 ps-4 pe-4 pt-5 pb-5 hover:bg-indigo-700 hover:text-white cursor-pointer"
+                className="mt-5 ps-4 pe-4 pt-5 pb-5  hover:bg-indigo-700 hover:text-white cursor-pointer"
               >
                 Create your resume
               </Button>
               <Button
                 variant="default"
-                className="mt-5 ps-4 pe-4 pt-5 pb-5 bg-indigo-500 hover:bg-indigo-700 hover:text-white cursor-pointer"
+                className="mt-5 ps-4 pe-4 pt-5 pb-5 hover:bg-indigo-700 hover:text-white cursor-pointer"
               >
                 View Your Resumes
               </Button>
             </div>
           </div>
-          <div>
+          <div className="-mt-10">
             <ResumePreviewCard />
           </div>
         </div>
 
         {/* why us */}
-        <div className="mt-10">
+        {/* <div className="mt-10">
           <p className="text-xl text-indigo-800 underline underline-offset-2 text-center font-semibold tracking-tight">
             Why Professionals Choose ResumeAI
           </p>
@@ -101,7 +98,7 @@ const ResumeLandingPage: React.FC = () => {
               />
             ))}
           </div>
-        </div>
+        </div> */}
       </section>
     </main>
   );
