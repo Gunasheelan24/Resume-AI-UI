@@ -84,7 +84,7 @@ const ResumeLandingPage: React.FC = () => {
         </div>
 
         {/* why us */}
-        {/* <div className="mt-10">
+        <div className="mt-10">
           <p className="text-xl text-indigo-800 underline underline-offset-2 text-center font-semibold tracking-tight">
             Why Professionals Choose ResumeAI
           </p>
@@ -98,7 +98,7 @@ const ResumeLandingPage: React.FC = () => {
               />
             ))}
           </div>
-        </div> */}
+        </div>
       </section>
     </main>
   );
