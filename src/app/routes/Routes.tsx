@@ -1,12 +1,11 @@
+import { createBrowserRouter } from "react-router-dom";
+
 import AuthLayout from "../../layouts/AuthLayout";
 import Signup from "../../features/auth/pages/signup";
 import SignIn from "@/features/auth/pages/signin/Index";
 import ResetPassword from "@/features/auth/pages/reset-password/Index";
-
-import { createBrowserRouter } from "react-router-dom";
 import VerifyOtp from "@/features/auth/pages/verify-otp/Index";
 import ResumeLayout from "@/layouts/ResumeLayout";
-import GetResume from "@/features/get-resume";
 
 export const routerObject = createBrowserRouter([
   {
@@ -20,7 +19,7 @@ export const routerObject = createBrowserRouter([
       },
       {
         path: "signin",
-        element: <SignIn />, 
+        element: <SignIn />,
       },
       {
         path: "reset-password",
@@ -35,9 +34,5 @@ export const routerObject = createBrowserRouter([
   {
     path: "resume",
     element: <ResumeLayout />,
-  },
-  {
-    path: "get-user-resume",
-    element: <GetResume />,
   },
 ]);
