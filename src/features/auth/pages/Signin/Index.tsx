@@ -74,6 +74,7 @@ const SignIn: React.FC = () => {
           message: "Signed in successfully.",
           popupToogle: true,
         });
+        console.log(getUserDetails);
       }
     } catch (error) {
       const apiError = error as ApiError;
