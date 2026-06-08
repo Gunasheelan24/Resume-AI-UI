@@ -15,23 +15,26 @@ import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { ApiError, SignUser } from "./types";
 import { signInImg } from "@/assets/png/Index";
-import type { PopupType } from "@/types/popup-types";
+import { useAppDispatch } from "@/app/store/hooks";
 import ErrorPopup from "@/components/common/error-popup/ErrorPopup";
-import { signInHandler } from "../../services/auth.services";
 import Loader from "@/components/common/app-loader";
+import useSignInMutation from "./userApi";
+import type { PopupType } from "@/types/popup-types";
+import type { ApiError, SignUser } from "./types";
+import { login } from "./signInSlice";
 
 const SignIn: React.FC = () => {
+  // React Router Hooks
+  const [signInMutation, { isLoading }] = useSignInMutation();
+  const dispatch = useAppDispatch();
+
   // hooks
   const [popup, setPopup] = useState<PopupType>({
     isSuccess: false,
     popupToogle: false,
     message: "",
   });
-
-  // Loader
-  const [loader, setLoader] = useState(false);
 
   // validation schema
   const validationSchema = zod.object({
@@ -62,19 +65,15 @@ const SignIn: React.FC = () => {
   // form submit handler
   const loginAccount = async (value: SignUser) => {
     try {
-      // loader
-      setLoader(true);
+      // RTK API
+      const signInResponse = await signInMutation(value);
 
-      // Business logic
-      const getUserDetails = await signInHandler(value);
-
-      if (getUserDetails?.status === 201) {
+      if (signInResponse?.data?.statusCode == 202) {
         setPopup({
           isSuccess: true,
           message: "Signed in successfully.",
           popupToogle: true,
         });
-        console.log(getUserDetails);
       }
     } catch (error) {
       const apiError = error as ApiError;
@@ -96,13 +95,12 @@ const SignIn: React.FC = () => {
       }
     } finally {
       reset();
-      setLoader(false);
     }
   };
 
   return (
     <>
-      {loader ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <main className="flex h-screen w-screen">
@@ -132,6 +130,7 @@ const SignIn: React.FC = () => {
                         type="text"
                         placeholder="email@domain.com"
                         className="p-5"
+                        autoComplete="email"
                         {...register("email")}
                       />
                       {errors.email && touchedFields.email && (
@@ -147,8 +146,9 @@ const SignIn: React.FC = () => {
                         id="password"
                         type="password"
                         placeholder="enter your password"
-                        {...register("password")}
                         className="p-5"
+                        autoComplete="current-password"
+                        {...register("password")}
                       />
                       {errors.password && touchedFields.password && (
                         <FieldDescription className="text-red-500">
