@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ErrorPopup from "@/components/common/error-popup/ErrorPopup";
+import useCreateAccountMutation from "./signupApi";
 import * as zod from "zod";
 
 import { motion } from "framer-motion";
@@ -19,22 +20,25 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getcreatedAccountDetails } from "../../services/auth.services";
 import { Link } from "react-router-dom";
-import type { User } from "./types";
+import type { CreateAccountTypes } from "./types";
 import type { PopupType } from "@/types/popup-types";
 import "./signup.module.scss";
 import type { ApiError } from "../signin/types";
 import Loader from "@/components/common/app-loader";
+import { useAppDispatch } from "@/app/store/hooks";
+import { loginSlice } from "../signin/signInSlice";
 
 const Signup: React.FC = () => {
   // hooks
   const [popup, setPopup] = useState<PopupType>({
     isSuccess: false,
     message: "",
-    popupToogle: false, 
+    popupToogle: false,
   });
 
-  // loader state
-  const [loader, setLoader] = useState(false); 
+  // dispatch
+  const [createAccountHandler, { isLoading }] = useCreateAccountMutation();
+  const dispatch = useAppDispatch();
 
   // validation
   const signupValidation = zod.object({
@@ -64,7 +68,7 @@ const Signup: React.FC = () => {
     handleSubmit,
     reset,
     formState: { errors, touchedFields },
-  } = useForm<User>({
+  } = useForm<CreateAccountTypes>({
     defaultValues: {
       email: "",
       userName: "",
@@ -75,13 +79,11 @@ const Signup: React.FC = () => {
   });
 
   // handle Submit
-  const createAccount = async (value: User) => {
+  const createAccount = async (value: CreateAccountTypes) => {
     try {
-      // loader
-      setLoader(true);
+      const createAccountResponse = await createAccountHandler(value).unwrap();
 
-      const userDetails = await getcreatedAccountDetails(value);
-      if (userDetails?.data?.statusCode == 201) {
+      if (createAccountResponse.statusCode == 201) {
         setPopup((prev) => {
           return {
             ...prev,
@@ -90,13 +92,38 @@ const Signup: React.FC = () => {
             popupToogle: true,
           };
         });
+
+        dispatch(
+          loginSlice({
+            isAuthorised: false,
+            ...createAccountResponse.data,
+          }),
+        );
       }
     } catch (error) {
       const apiError = error as ApiError;
-      console.log(error, apiError);
+      if (apiError.data.statusCode == 401) {
+        setPopup((prev) => {
+          return {
+            ...prev,
+            isSuccess: false,
+            message: apiError.data.message,
+            popupToogle: true,
+          };
+        });
+      } else {
+        setPopup((prev) => {
+          return {
+            ...prev,
+            isSuccess: false,
+            message: "Something went wrong",
+            popupToogle: true,
+          };
+        });
+      }
+      console.log(apiError);
     } finally {
       reset();
-      setLoader(false);
     }
   };
 
@@ -107,7 +134,7 @@ const Signup: React.FC = () => {
 
   return (
     <>
-      {loader ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <main className="h-screen w-screen flex">

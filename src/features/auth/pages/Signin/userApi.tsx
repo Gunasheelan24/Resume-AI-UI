@@ -1,5 +1,6 @@
 import userApi from "@/api/api";
 import type { SignInResponse, SignUser } from "./types";
+import { childEndpoints, httpMethods, parentEndpoints } from "@/api/endpoint";
 
 export const getUserResponse = userApi.injectEndpoints({
   // the endpoints provide a builder from rtk we need to sent a callback function
@@ -10,8 +11,8 @@ export const getUserResponse = userApi.injectEndpoints({
     signIn: builder.mutation<SignInResponse, SignUser>({
       // query is the main property and its an callback fn we need to return the object of the query
       query: (body) => ({
-        url: `/auth/signin`,
-        method: "POST",
+        url: `${parentEndpoints.auth}/${childEndpoints.signIn}`,
+        method: httpMethods.post,
         body,
       }),
     }),

@@ -22,7 +22,7 @@ import Loader from "@/components/common/app-loader";
 import useSignInMutation from "./userApi";
 import type { PopupType } from "@/types/popup-types";
 import type { ApiError, SignUser } from "./types";
-import { login } from "./signInSlice";
+import { loginSlice } from "./signInSlice";
 
 const SignIn: React.FC = () => {
   // React Router Hooks
@@ -66,14 +66,21 @@ const SignIn: React.FC = () => {
   const loginAccount = async (value: SignUser) => {
     try {
       // RTK API
-      const signInResponse = await signInMutation(value);
-
-      if (signInResponse?.data?.statusCode == 202) {
+      const signInResponse = await signInMutation(value).unwrap();
+      if (signInResponse.statusCode == 202) {
         setPopup({
           isSuccess: true,
           message: "Signed in successfully.",
           popupToogle: true,
         });
+
+        // Dispatch Action
+        dispatch(
+          loginSlice({
+            ...signInResponse.data,
+            isAuthorised: false,
+          }),
+        );
       }
     } catch (error) {
       const apiError = error as ApiError;

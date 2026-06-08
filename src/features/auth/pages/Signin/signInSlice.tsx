@@ -18,7 +18,7 @@ const signInSlice = createSlice({
   name: "signIn",
   initialState,
   reducers: {
-    login: (state, actions: PayloadAction<SignInTypes>) => {
+    loginSlice: (state, actions: PayloadAction<SignInTypes>) => {
       // payload data
       const data = actions.payload;
 
@@ -33,5 +33,5 @@ const signInSlice = createSlice({
   },
 });
 
-export const { login } = signInSlice.actions;
+export const { loginSlice } = signInSlice.actions;
 export default signInSlice.reducer;
