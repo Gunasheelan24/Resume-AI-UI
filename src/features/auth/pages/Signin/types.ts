@@ -6,12 +6,9 @@ export interface SignUser {
 }
 
 export interface ApiError {
-  data: {
-    message: string;
-    error: string;
-    statusCode: number;
-  };
-  status: number;
+  message: string;
+  error: string;
+  statusCode: number;
 }
 
 // LOGIN API RETURN RESPONSE TYPE

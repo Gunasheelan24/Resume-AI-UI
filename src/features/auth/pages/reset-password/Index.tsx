@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import Loader from "@/components/common/app-loader";
+import ErrorPopup from "@/components/common/error-popup/ErrorPopup";
+import useResetPasswordMutation from "./resetPasswordApi";
 import * as zod from "zod";
 
 import { useForm } from "react-hook-form";
@@ -6,7 +9,6 @@ import { resetPassword } from "@/assets/png/Index";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getResetPasswordResponse } from "../../services/auth.services";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Field,
@@ -15,13 +17,14 @@ import {
   FieldLabel,
   FieldSet,
 } from "@/components/ui/field";
-import ErrorPopup from "@/components/common/error-popup/ErrorPopup";
 import { successResponses } from "@/common/response.constant";
 import type { Popup } from "@/components/common/error-popup/types";
 import type { errorType } from "@/types/popup-types";
-import Loader from "@/components/common/app-loader";
 
 const ResetPassword: React.FC = () => {
+  // resetPassword Redux API Hook
+  const [resetpasswordApi, { isLoading }] = useResetPasswordMutation();
+  
   // validation schema
   const validationSchema = zod.object({
     email: zod.email("Invalid Email Address").nonempty("Email is required"),
@@ -29,18 +32,13 @@ const ResetPassword: React.FC = () => {
 
   // React Hooks
   const navigate = useNavigate();
-
-  // manage popup
   const [popup, setPopup] = useState<Popup>({
     message: "",
     isSuccess: false,
     popupToogle: false,
   });
 
-  // Loader
-  const [loader, setLoader] = useState(false);
-
-  // ReactHookhook
+  // ReactHookForm
   const {
     handleSubmit,
     register,
@@ -56,21 +54,19 @@ const ResetPassword: React.FC = () => {
   // formHandler
   const resetPasswordHandler = async (value: { email: string }) => {
     try {
-      // loader
-      setLoader(true);
+      const resetPasswordResponse = await resetpasswordApi(value).unwrap();
 
-      const userDetails = await getResetPasswordResponse(value);
-      if (userDetails?.status == 201) {
+      if (resetPasswordResponse?.statusCode == 201) {
         setPopup((prev) => {
           return {
             ...prev,
             isError: true,
-            message: successResponses.otpSent,
+            message: resetPasswordResponse?.message as string,
             tooglePopup: true,
           };
         });
 
-        navigate(`/auth/verify-otp/${value.email}`);
+        navigate(`/auth/verify-otp/${value.email}?passwordReset=otp-sent`);
       }
     } catch (error) {
       const errors = error as errorType;
@@ -96,13 +92,12 @@ const ResetPassword: React.FC = () => {
       });
     } finally {
       reset();
-      setLoader(false);
     }
   };
 
   return (
     <>
-      {loader ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <main>

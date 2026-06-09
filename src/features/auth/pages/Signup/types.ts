@@ -3,6 +3,4 @@ export interface CreateAccountTypes {
   email: string;
   userName: string;
   password: string;
-}
-
-// export type ResponseDataTypeSignIn =
+};

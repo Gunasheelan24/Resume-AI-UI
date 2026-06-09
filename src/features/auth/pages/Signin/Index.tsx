@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as zod from "zod";
 
 import {
@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInImg } from "@/assets/png/Index";
 import { useAppDispatch } from "@/app/store/hooks";
@@ -26,14 +26,18 @@ import { loginSlice } from "./signInSlice";
 
 const SignIn: React.FC = () => {
   // React Router Hooks
+  const [searchParams] = useSearchParams();
   const [signInMutation, { isLoading }] = useSignInMutation();
   const dispatch = useAppDispatch();
 
+  // check the reset password
+  const isSuccessfulReset = searchParams.get("resetPassword") == "successfull";
+
   // hooks
   const [popup, setPopup] = useState<PopupType>({
-    isSuccess: false,
-    popupToogle: false,
-    message: "",
+    isSuccess: isSuccessfulReset,
+    popupToogle: isSuccessfulReset,
+    message: isSuccessfulReset ? "Password Reset Successfull" : "",
   });
 
   // validation schema

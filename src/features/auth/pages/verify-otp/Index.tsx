@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import z from "zod";
 import ErrorPopup from "@/components/common/error-popup/ErrorPopup";
+import Loader from "@/components/common/app-loader";
+import useVerifyPasswordMutation from "./verifyOtpApi";
+import z from "zod";
 
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { HiOutlineRefresh } from "react-icons/hi";
 import { verifyImg } from "@/assets/png/Index";
 import { useForm, Controller } from "react-hook-form";
-import { verifyOneTimePasswordHandler } from "../../services/auth.services";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -32,10 +33,16 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import type { PopupType } from "@/types/popup-types";
+import type { ResetPasswordFormTypes } from "./types";
+import type { GlobalApiError } from "@/types/global";
 
 const VerifyOtp: React.FC = () => {
   // React Router Hook
   const { email } = useParams();
+  const navigate = useNavigate();
+
+  // RTK
+  const [resetPasswordHandler, { isLoading }] = useVerifyPasswordMutation();
 
   // error popup hook
   const [popup, setPopup] = useState<PopupType>({
@@ -43,9 +50,6 @@ const VerifyOtp: React.FC = () => {
     message: "",
     popupToogle: false,
   });
-
-  // Loader
-  const [loader, setLoader] = useState(false);
 
   // Validation Schema
   const validationSchema = z
@@ -78,7 +82,7 @@ const VerifyOtp: React.FC = () => {
     reset,
     register,
     formState: { errors, touchedFields },
-  } = useForm<VerifyOtp>({
+  } = useForm<ResetPasswordFormTypes>({
     defaultValues: {
       otp: "",
       password: "",
@@ -88,23 +92,44 @@ const VerifyOtp: React.FC = () => {
   });
 
   // Handle Submit
-  const handleVerifyOtp = async (value: VerifyOtp) => {
+  const handleVerifyOtp = async (value: ResetPasswordFormTypes) => {
     try {
-      setLoader(true);
-      await verifyOneTimePasswordHandler({
+      const resetPasswordResponse = await resetPasswordHandler({
         ...value,
         email: email as string,
+      }).unwrap();
+
+      if (resetPasswordResponse.statusCode == 201) {
+        setPopup({
+          isSuccess: true,
+          popupToogle: true,
+          message: resetPasswordResponse.message,
+        });
+        navigate("/auth/signin?redirect=true&resetPassword=successfull");
+      }
+    } catch (exception) {
+      const error = exception as GlobalApiError;
+      if (error?.status == 401) {
+        setPopup({
+          isSuccess: false,
+          popupToogle: true,
+          message: error?.data?.message,
+        });
+        return;
+      }
+
+      setPopup({
+        isSuccess: false,
+        popupToogle: true,
+        message: "Something went wrong",
       });
-    } catch (error) {
-      console.log(error);
     } finally {
       reset();
-      setLoader(false);
     }
   };
   return (
     <>
-      {loader ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <main className="h-screen">

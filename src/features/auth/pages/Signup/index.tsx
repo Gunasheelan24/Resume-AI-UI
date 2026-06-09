@@ -18,12 +18,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getcreatedAccountDetails } from "../../services/auth.services";
 import { Link } from "react-router-dom";
 import type { CreateAccountTypes } from "./types";
 import type { PopupType } from "@/types/popup-types";
 import "./signup.module.scss";
-import type { ApiError } from "../signin/types";
+import type { GlobalApiError } from "@/types/global";
 import Loader from "@/components/common/app-loader";
 import { useAppDispatch } from "@/app/store/hooks";
 import { loginSlice } from "../signin/signInSlice";
@@ -101,7 +100,7 @@ const Signup: React.FC = () => {
         );
       }
     } catch (error) {
-      const apiError = error as ApiError;
+      const apiError = error as GlobalApiError;
       if (apiError.data.statusCode == 401) {
         setPopup((prev) => {
           return {
