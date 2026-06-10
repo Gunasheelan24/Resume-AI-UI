@@ -13,13 +13,13 @@ export const routerObject = createBrowserRouter([
     element: <AuthLayout />,
     children: [
       {
+        path: "login",
+        element: <SignIn />,
+      },
+      {
         index: true,
         path: "signup",
         element: <Signup />,
-      },
-      {
-        path: "signin",
-        element: <SignIn />,
       },
       {
         path: "reset-password",
