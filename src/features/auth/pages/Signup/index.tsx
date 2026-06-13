@@ -40,25 +40,29 @@ const Signup: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // validation
-  const signupValidation = zod.object({
+  export const signupValidation = zod.object({
     email: zod
-      .email("Please enter a valid email")
-      .nonempty("Email is required"),
+      .string()
+      .nonempty("Email is required")
+      .email("Please enter a valid email"),
+
     userName: zod
       .string()
-      .nonempty("User is required")
+      .nonempty("Username is required")
       .min(8, "Username must be at least 8 characters")
       .max(16, "Username cannot exceed 16 characters"),
+
     fullName: zod
       .string()
-      .nonempty("Fullname is required")
-      .min(8, "FullName must be at least 8 characters")
-      .max(16, "FullName cannot exceed 16 characters"),
+      .nonempty("Full name is required")
+      .min(8, "Full name must be at least 8 characters")
+      .max(16, "Full name cannot exceed 16 characters"),
+
     password: zod
       .string()
       .nonempty("Password is required")
       .min(8, "Password must be at least 8 characters")
-      .max(21, "Password cannot exceed 16 characters"),
+      .max(21, "Password cannot exceed 21 characters"),
   });
 
   // React Hook Form
@@ -291,7 +295,7 @@ const Signup: React.FC = () => {
                     <p className="text-sm text-center">
                       Already have an account?
                       <Link
-                        to={"/auth/signin"}
+                        to={"/auth/login"}
                         className="text-red-500 underline cursor-pointer hover:text-red-800"
                       >
                         {" "}
