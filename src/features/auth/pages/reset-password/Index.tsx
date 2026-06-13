@@ -24,7 +24,7 @@ import type { errorType } from "@/types/popup-types";
 const ResetPassword: React.FC = () => {
   // resetPassword Redux API Hook
   const [resetpasswordApi, { isLoading }] = useResetPasswordMutation();
-  
+
   // validation schema
   const validationSchema = zod.object({
     email: zod.email("Invalid Email Address").nonempty("Email is required"),
