@@ -3,14 +3,14 @@ import Loader from "@/components/common/app-loader";
 import ErrorPopup from "@/components/common/error-popup/ErrorPopup";
 import useResetPasswordMutation from "./resetPasswordApi";
 import * as zod from "zod";
-
-import { useForm } from "react-hook-form";
-import { resetPassword } from "@/assets/png/Index";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "react-router-dom";
-import {
+  
+  import { useForm } from "react-hook-form";
+  import { resetPassword } from "@/assets/png/Index";
+  import { Input } from "@/components/ui/input";
+  import { Button } from "@/components/ui/button";
+  import { zodResolver } from "@hookform/resolvers/zod";
+  import { Link, useNavigate } from "react-router-dom";
+  import {
   Field,
   FieldDescription,
   FieldGroup,
