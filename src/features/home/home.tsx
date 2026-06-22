@@ -1,6 +1,6 @@
 import React from "react";
 
-const Home = () => {
+const Home: React.FC = () => {
   return (
     <section className="min-h-screen bg-slate-950 text-white flex items-center">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-12 items-center">
