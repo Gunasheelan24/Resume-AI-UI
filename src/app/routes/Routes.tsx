@@ -5,7 +5,6 @@ import SignIn from "@/features/auth/pages/signin/Index";
 import ResetPassword from "@/features/auth/pages/reset-password/Index";
 import VerifyOtp from "@/features/auth/pages/verify-otp/Index";
 import ResumeLayout from "@/layouts/ResumeLayout";
-
 export const routerObject = createBrowserRouter([
   {
     path: "auth",
