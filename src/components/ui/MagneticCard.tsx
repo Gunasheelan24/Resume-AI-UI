@@ -14,10 +14,34 @@ export default function MagneticCard() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-950 p-6">
-      <div
-        onMouseMove={handleMove}
-        className="relative w-80 h-52 rounded-3xl overflow-hidden border border-zinc-700 cursor-pointer"
-      >
+<div
+  onMouseMove={handleMove}
+  className="
+    group
+    relative
+    w-80
+    h-52
+    rounded-3xl
+    overflow-hidden
+    cursor-pointer
+    border border-white/10
+    bg-zinc-900/50
+    backdrop-blur-xl
+    shadow-[0_0_50px_rgba(99,102,241,0.15)]
+    transition-all
+    duration-300
+    hover:scale-[1.03]
+    hover:border-indigo-500/50
+    hover:shadow-[0_0_80px_rgba(99,102,241,0.35)]
+    before:absolute
+    before:inset-0
+    before:bg-gradient-to-br
+    before:from-white/10
+    before:via-transparent
+    before:to-transparent
+    before:pointer-events-none
+  "
+>
         <div
           className="absolute inset-0 transition-all duration-100"
           style={{
